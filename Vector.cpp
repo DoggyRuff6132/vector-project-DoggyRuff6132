@@ -62,7 +62,7 @@ Vector<T>::Vector(std::size_t n, const T& value) {
         end_ = begin_ + n;
         end_cap_ = end_;
 
-        for (int i = 0; i < n; i++){
+        for (std::size_t i = 0; i < n; i++){
             begin_[i] = value;
         }
     }
@@ -351,8 +351,17 @@ void Vector<T>::clear() {
 //     overwritten with T(), not left holding old values.
 template <typename T>
 void Vector<T>::resize(std::size_t n) {
-    // TODO
-    throw std::logic_error("resize() not implemented");
+    if (n < size()){
+        end_ = begin_ + n;
+    } else if (n > size()){
+        T* old_end = end_;
+        if (n > capacity()){
+            reallocate(n);
+        }
+        for (auto it = old_end; it != end(); ++it){
+            *it = T();
+        }
+    }
 }
 
 // Inserts a copy of value at position index, so that afterwards v[index] is
@@ -386,7 +395,7 @@ bool operator==(const Vector<T>& a, const Vector<T>& b) {
         return false;
     }
 
-    for (int i = 0; i < a.size(); i++){
+    for (std::size_t i = 0; i < a.size(); i++){
         if (a[i] != b[i]){
             return false;
         }
