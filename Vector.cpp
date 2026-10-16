@@ -131,6 +131,7 @@ Vector<T>& Vector<T>::operator=(const Vector& other) {
     
     auto size = other.size();
     if (size == 0){
+        if (begin_ != nullptr) delete[] begin_;
         begin_ = nullptr;
         end_ = nullptr;
         end_cap_ = nullptr;
