@@ -112,7 +112,7 @@ Vector<T>::Vector(const Vector& other) {
         end_ = begin_ + size;
         end_cap_ = end_;
         int i = 0;
-        for (auto it = other.begin(); it != other.end(); it++){
+        for (auto it = other.begin(); it != other.end(); ++it){
             begin_[i] = *it;
             i++;
         }
@@ -135,12 +135,13 @@ Vector<T>& Vector<T>::operator=(const Vector& other) {
         end_ = nullptr;
         end_cap_ = nullptr;
     } else {
-        delete[] begin_;
+        if (begin_ != nullptr) delete[] begin_;
+        
         begin_ = new T[size];
         end_ = begin_ + size;
         end_cap_ = end_;
         int i = 0;
-        for (auto it = other.begin(); it != other.end(); it++){
+        for (auto it = other.begin(); it != other.end(); ++it){
             begin_[i] = *it;
             i++;
         }
@@ -337,6 +338,7 @@ void Vector<T>::shrink_to_fit() {
 // which lives in the old buffer you are about to free.
 template <typename T>
 void Vector<T>::push_back(const T& value) {
+    T valueCopy = value;
     if (begin_ == nullptr){
         begin_ = new T[1];
         end_ = begin_;
@@ -345,7 +347,7 @@ void Vector<T>::push_back(const T& value) {
     if (size() >= capacity()){
         reallocate(std::max(capacity()+1, (size_t)(capacity()*growth_factor)));
     }
-    begin_[size()] = value;
+    begin_[size()] = valueCopy;
     end_++;
 }
 
@@ -396,18 +398,19 @@ void Vector<T>::resize(std::size_t n) {
 // Like push_back, value may refer to an element of this vector.
 template <typename T>
 void Vector<T>::insert(std::size_t index, const T& value) {
+    T valueCopy = value;
     if (index > size()){
         throw std::out_of_range("index out of range");
     }
     if (index == size()){
-        push_back(value);
+        push_back(valueCopy);
         return;
     }
     push_back(begin_[size()-1]);
     for (auto it = end()-1; it != begin_+index; --it){
         *it = *(it-1);
     }
-    begin_[index] = value;
+    begin_[index] = valueCopy;
 }
 
 // Removes the element at index, shifting the elements after it one position
