@@ -163,15 +163,31 @@ Vector<T>::~Vector() {
 // buffer at all.
 template <typename T>
 void Vector<T>::reallocate(std::size_t new_cap) {
+    if (new_cap == 0){
+        if (begin_ != nullptr){
+            delete[] begin_;
+        }
+        begin_ = nullptr;
+        end_ = nullptr;
+        end_cap_ = nullptr;
+        return;
+    } else if (begin_ == nullptr){
+        begin_ = new T[new_cap];
+        end_ = begin_;
+        end_cap_ = begin_ + new_cap;
+        return;
+    }
+
     T* oldArr = begin_;
+    std::size_t oldSize = size();
     begin_ = new T[new_cap];
-    for (std::size_t i = 0; i < size(); i++){
+    for (std::size_t i = 0; i < oldSize; i++){
         begin_[i] = oldArr[i];
     }
     delete[] oldArr;
 
-    end_ = begin_ + new_cap;
-    end_cap_ = end_;
+    end_ = begin_ + oldSize;
+    end_cap_ = begin_ + new_cap;
 }
 
 // ---- Element access ----
@@ -198,9 +214,8 @@ template <typename T>
 T& Vector<T>::at(std::size_t i) {
     if (i >= size()){
         throw std::out_of_range("index out of range");
-    } else {
-        return begin_[i];
     }
+    return begin_[i];
 }
 
 // Returns a reference to the first element.
@@ -319,6 +334,11 @@ void Vector<T>::shrink_to_fit() {
 // which lives in the old buffer you are about to free.
 template <typename T>
 void Vector<T>::push_back(const T& value) {
+    if (begin_ == nullptr){
+        begin_ = new T[1];
+        end_ = begin_+1;
+        end_cap_ = end_;
+    }
     if (size() >= capacity()){
         reallocate(std::max(capacity()+1, (size_t)(capacity()*growth_factor)));
         begin_[size()] = value;
