@@ -125,14 +125,33 @@ Vector<T>::Vector(const Vector& other) {
 // unchanged. Returns *this so that a = b = c works.
 template <typename T>
 Vector<T>& Vector<T>::operator=(const Vector& other) {
-    // TODO
-    throw std::logic_error("operator= not implemented");
+    if (other == *this){
+        return *this;
+    }
+    
+    auto size = other.size();
+    if (size == 0){
+        begin_ = nullptr;
+        end_ = nullptr;
+        end_cap_ = nullptr;
+    } else {
+        delete[] begin_;
+        begin_ = new T[size];
+        end_ = begin_ + size;
+        end_cap_ = end_;
+        int i = 0;
+        for (auto it = other.begin(); it != other.end(); it++){
+            begin_[i] = *it;
+            i++;
+        }
+    }
+    return *this;
 }
 
 // Destructor. 
 template <typename T>
 Vector<T>::~Vector() {
-    // TODO
+    delete[] begin_;
 }
 
 // ---- Private helper ----
