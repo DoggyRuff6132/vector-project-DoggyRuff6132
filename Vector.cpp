@@ -62,8 +62,8 @@ Vector<T>::Vector(std::size_t n, const T& value) {
         end_ = begin_ + n;
         end_cap_ = end_;
 
-        for (auto i = begin_; i != end_; i++){
-            begin_[n] = value;
+        for (int i = 0; i < n; i++){
+            begin_[i] = value;
         }
 
     }
