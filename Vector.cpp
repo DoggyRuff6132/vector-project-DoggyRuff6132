@@ -303,6 +303,9 @@ bool Vector<T>::empty() const {
 // and capacity never goes down.
 template <typename T>
 void Vector<T>::reserve(std::size_t n) {
+    if (n <= capacity()){
+        return;
+    }
     reallocate(n);
 }
 
@@ -394,6 +397,10 @@ template <typename T>
 void Vector<T>::insert(std::size_t index, const T& value) {
     if (index > size()){
         throw std::out_of_range("index out of range");
+    }
+    if (index == size()){
+        push_back(value);
+        return;
     }
     push_back(begin_[size()-1]);
     for (auto it = end()-1; it != begin_+index; --it){
