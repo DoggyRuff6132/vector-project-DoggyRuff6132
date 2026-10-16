@@ -65,7 +65,6 @@ Vector<T>::Vector(std::size_t n, const T& value) {
         for (int i = 0; i < n; i++){
             begin_[i] = value;
         }
-
     }
 }
 
@@ -93,6 +92,7 @@ Vector<T>::Vector(std::initializer_list<T> il) {
         int i = 0;
         for (const T& x : il){
             begin_[i] = x;
+            i++;
         }
     }
 }
