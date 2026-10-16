@@ -336,14 +336,14 @@ template <typename T>
 void Vector<T>::push_back(const T& value) {
     if (begin_ == nullptr){
         begin_ = new T[1];
-        end_ = begin_+1;
-        end_cap_ = end_;
+        end_ = begin_;
+        end_cap_ = end_+1;
     }
     if (size() >= capacity()){
         reallocate(std::max(capacity()+1, (size_t)(capacity()*growth_factor)));
-        begin_[size()] = value;
-        end_++;
     }
+    begin_[size()] = value;
+    end_++;
 }
 
 // Removes the last element. Capacity is unchanged and nothing is freed.
