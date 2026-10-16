@@ -372,8 +372,14 @@ void Vector<T>::resize(std::size_t n) {
 // Like push_back, value may refer to an element of this vector.
 template <typename T>
 void Vector<T>::insert(std::size_t index, const T& value) {
-    // TODO
-    throw std::logic_error("insert() not implemented");
+    if (index > size()){
+        throw std::out_of_range("index out of range");
+    }
+    push_back(begin_[size()-1]);
+    for (auto it = end()-1; it != begin_+index; --it){
+        *it = *(it-1);
+    }
+    begin_[index] = value;
 }
 
 // Removes the element at index, shifting the elements after it one position
