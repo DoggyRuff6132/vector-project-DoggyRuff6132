@@ -298,8 +298,6 @@ template <typename T>
 void Vector<T>::shrink_to_fit() {
     if (empty()){
         delete[] begin_;
-        delete[] end_;
-        delete[] end_cap_;
         begin_ = nullptr;
         end_ = nullptr;
         end_cap_ = nullptr;
@@ -384,15 +382,22 @@ void Vector<T>::erase(std::size_t index) {
 // compares equal with ==. Capacity does not matter.
 template <typename T>
 bool operator==(const Vector<T>& a, const Vector<T>& b) {
-    // TODO
-    throw std::logic_error("operator== not implemented");
+    if (a.size() != b.size()){
+        return false;
+    }
+
+    for (int i = 0; i < a.size(); i++){
+        if (a[i] != b[i]){
+            return false;
+        }
+    }
+    return true;
 }
 
 // Returns true if a and b are not equal (hint: use operator==).
 template <typename T>
 bool operator!=(const Vector<T>& a, const Vector<T>& b) {
-    // TODO
-    throw std::logic_error("operator!= not implemented");
+    return !(a == b);
 }
 
 #endif
