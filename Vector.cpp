@@ -387,8 +387,14 @@ void Vector<T>::insert(std::size_t index, const T& value) {
 // Throws std::out_of_range if index >= size() (and changes nothing).
 template <typename T>
 void Vector<T>::erase(std::size_t index) {
-    // TODO
-    throw std::logic_error("erase() not implemented");
+    if (index >= size()){
+        throw std::out_of_range("index out of range");
+    }
+
+    for (auto it = begin_+index; it != end()-1; ++it){
+        *it = *(it+1);
+    }
+    end_--;
 }
 
 // ---- Non-member operators ----
