@@ -377,12 +377,13 @@ void Vector<T>::resize(std::size_t n) {
     if (n < size()){
         end_ = begin_ + n;
     } else if (n > size()){
-        T* old_end = end_;
+        std::size_t oldSize = size();
         if (n > capacity()){
             reallocate(n);
         }
-        for (auto it = old_end; it != end(); ++it){
-            *it = T();
+        end_ = begin_ + n;
+        for (auto it = begin_ + oldSize; it != end(); ++it){
+            *it = T(); 
         }
     }
 }
